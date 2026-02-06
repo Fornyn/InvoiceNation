@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<title>TAX INVOICE</title>
+
+<style>
+body {
+    font-family: Helvetica;
+    font-size: 10px;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+td {
+    border: 1px solid #000;
+    padding: 4px;
+    vertical-align: top;
+}
+.center { text-align: center; }
+.right { text-align: right; }
+.bold { font-weight: bold; }
+.no-border { border: none; }
+</style>
+</head>
+
+<body>
+
+<!-- COMPANY HEADER -->
+<table>
+<tr>
+<td class="center bold no-border" colspan="2" style="border:none;font-size:14px;">
+{{ settings.company_name }}
+</td>
+</tr>
+<tr>
+<td class="center no-border" colspan="2" style="border:none;">
+Mo. : {{ settings.company_phone }}<br/>
+<strong>ORIGINAL / DUPLICATE / TRIPLICATE TAX INVOICE</strong>
+</td>
+</tr>
+</table>
+
+<!-- COMPANY + INVOICE INFO -->
+<table>
+<tr>
+<td width="60%">
+<strong>Company GSTIN No. :</strong> {{ settings.gstin }}<br/>
+<strong>PAN No. :</strong> {{ settings.pan }}<br/>
+<strong>State Code :</strong> {{ settings.state_code }}
+</td>
+<td width="40%">
+<strong>Invoice No. :</strong> {{ invoice.formatted_invoice_number }}<br/>
+<strong>Invoice Date :</strong> {{ invoice.issue_date }}<br/>
+<strong>Terms of Payment :</strong> {{ settings.payment_terms }}
+</td>
+</tr>
+</table>
+
+<!-- BUYER BLOCK -->
+<table>
+<tr>
+<td width="60%">
+<strong>Buyer :-</strong><br/>
+{{ invoice.client.name }}<br/>
+{{ invoice.client.address }}<br/>
+<strong>Party’s GSTIN No. :</strong> {{ invoice.client.gstin|default:"" }}
+</td>
+<td width="40%">
+<strong>Buyer's Order No. :</strong><br/><br/>
+<strong>Destination :</strong>
+</td>
+</tr>
+</table>
+
+<!-- ITEM TABLE -->
+<table>
+<tr>
+<td class="center bold" width="5%">Sr.<br/>No.</td>
+<td class="center bold" width="35%">Description of Goods</td>
+<td class="center bold" width="10%">HSN</td>
+<td class="center bold" width="10%">UOM</td>
+<td class="center bold" width="10%">Qty</td>
+<td class="center bold" width="15%">Rate Per Unit</td>
+<td class="center bold" width="15%">Amount (Rs.)</td>
+</tr>
+
+{% for item in invoice.items.all %}
+<tr>
+<td class="center">{{ forloop.counter }}</td>
+<td>{{ item.product.name }}</td>
+<td class="center">{{ item.product.hsn|default:"" }}</td>
+<td class="center">Nos</td>
+<td class="right">{{ item.quantity }}</td>
+<td class="right">{{ item.price }}</td>
+<td class="right">{{ item.line_total }}</td>
+</tr>
+{% endfor %}
+</table>
+
+<!-- TOTALS BLOCK -->
+<table>
+<tr>
+<td class="right bold" width="70%">Total Amount Before Tax</td>
+<td class="right" width="30%">{{ invoice.subtotal }}</td>
+</tr>
+<tr>
+<td class="right">CGST 9 %</td>
+<td class="right">{{ invoice.total_gst }}</td>
+</tr>
+<tr>
+<td class="right">SGST 9 %</td>
+<td class="right">{{ invoice.total_gst }}</td>
+</tr>
+<tr>
+<td class="right bold">Total Amount After Tax</td>
+<td class="right bold">{{ invoice.total_amount }}</td>
+</tr>
+</table>
+
+<!-- BANK DETAILS -->
+<table>
+<tr>
+<td>
+<strong>Bank Details</strong><br/>
+Bank Name : {{ settings.bank.name }}<br/>
+A/c No. : {{ settings.bank.account_no }}<br/>
+IFSC Code : {{ settings.bank.ifsc }}
+</td>
+</tr>
+</table>
+
+<!-- DECLARATION -->
+<table>
+<tr>
+<td class="no-border" style="border:none;">
+Certified that the Particulars given above are true and correct.<br/>
+Goods once sold will not be taken back.<br/>
+Interest 24% p.s. will be charged on overdue payment.<br/>
+Subject to Baroda Jurisdiction only.
+</td>
+</tr>
+<tr>
+<td class="right no-border" style="border:none;">
+For, {{ settings.company_name }}<br/><br/>
+<strong>Authorised Signatory / Name</strong>
+</td>
+</tr>
+<tr>
+<td class="no-border" style="border:none;">
+<strong>Total Amount in Words :</strong> _______________________________
+</td>
+</tr>
+<tr>
+<td class="center no-border" style="border:none;">
+{{ settings.address }}
+</td>
+</tr>
+</table>
+
+</body>
+</html>

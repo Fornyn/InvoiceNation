@@ -11,9 +11,8 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 from pathlib import Path
-
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
 
 
 # Quick-start development settings - unsuitable for production
@@ -38,6 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'clients',
+    'products',
+    'invoices',
 ]
 
 MIDDLEWARE = [
@@ -54,18 +55,20 @@ ROOT_URLCONF = 'config.urls'
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [BASE_DIR / "templates"],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.debug",
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
             ],
         },
     },
 ]
+
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
@@ -116,3 +119,21 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+
+INVOICE_SETTINGS = {
+    "company_name": "BRITEX PLASTOCHEM",
+    "company_phone": "9825407905",
+    "gstin": "24AJWPB0528P1ZV",
+    "pan": "AJWPB0528P",
+    "state_code": "24",
+    "address": (
+        "TDT Mega Industrial Park, Plot No. 59 P, Lamdapura.\n"
+        "Ta. Savli, Dist. Vadodara Pin - 391775."
+    ),
+    "bank": {
+        "name": "BANK OF BARODA, NEW VIP ROAD",
+        "account_no": "36980200000633",
+        "ifsc": "BARB0NEWVIP",
+    },
+    "payment_terms": "30 days",
+}
